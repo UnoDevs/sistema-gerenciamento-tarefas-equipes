@@ -1,0 +1,6 @@
+export const ROLESCONSTANTS = {
+    ADMIN: "ADMIN",
+    LEADER: "LEADER",
+    DEAFULT: "DEAFULT",
+    GUEST: "GUEST"
+}

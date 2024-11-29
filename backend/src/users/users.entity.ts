@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Team } from "src/teams/teams.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 
 @Entity()
@@ -15,6 +16,12 @@ export class User {
     
     @Column()
     password: string;
+
+    @Column()
+    role: string;
+
+    @ManyToMany(() => Team, (team) => team.members)
+    teams: Team[];
 
 
 }

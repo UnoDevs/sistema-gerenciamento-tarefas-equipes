@@ -9,6 +9,9 @@ export class SingUpDTO {
     email: string;
 
     @IsNotEmpty()
+    role: string;
+
+    @IsNotEmpty()
     password: string;
 }
 
@@ -26,6 +29,12 @@ export class ProfileDTO {
     
     @IsNotEmpty()
     name: string;
+
+    @IsNotEmpty()
+    email: string;
+    
+    @IsNotEmpty()
+    role: string;
     
     password?: string;
 }

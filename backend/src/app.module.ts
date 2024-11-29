@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/users.entity';
+import { TeamsService } from './teams/teams.service';
+import { TeamsModule } from './teams/teams.module';
+
 // import { MailerModule } from '@nestjs-modules/mailer';
 // import * as handlebars from "handlebars";
 // import path from 'path';
@@ -49,9 +52,10 @@ import { User } from './users/users.entity';
     }),
     // MailerModule.forRoot(MailerConfig),
     UsersModule,
-    AuthModule
+    AuthModule,
+    TeamsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TeamsService],
 })
 export class AppModule {}

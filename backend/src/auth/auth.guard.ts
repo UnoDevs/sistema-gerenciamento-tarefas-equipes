@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
-import { jwtConstants } from './constants';
+import { JWTCONTANTS } from '../constants/jwt.constants';
 import { Request } from 'express';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AuthGuard {
 
     try {
       const payload: { id: any } = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret
+        secret: JWTCONTANTS.SECRECT
       });
 
       request["user"] = await this.userRepository.findOneBy({ id: payload.id });

@@ -28,12 +28,19 @@ export class UsersService {
         return this.usersRepository.findOneBy({ email });
     }
 
+    async findOneById(id: number) {
+        return this.usersRepository.findOneBy({ id });
+    }
+
     async updateProfile(user: User, data: ProfileDTO) {
         const currentUser = await this.usersRepository.findOne({
             where: { id: user.id }
         });
 
         currentUser.name = data.name;
+        currentUser.email = data.email;
+        currentUser.password = data.password;
+        currentUser.role = data.role;
 
         await this.usersRepository.save(currentUser);
         return currentUser;

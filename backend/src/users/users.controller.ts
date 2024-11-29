@@ -4,7 +4,6 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from './users.service';
 import { UserDTO } from './DTO/users.dto';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Controller('users')
 export class UsersController {

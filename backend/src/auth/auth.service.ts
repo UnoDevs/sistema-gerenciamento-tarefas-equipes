@@ -4,9 +4,7 @@ import { User } from 'src/users/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { ProfileDTO } from './auth.dto';
 import { PasswordService } from './password/password.service';
-import { MailerService } from '@nestjs-modules/mailer';
 import { UserDTO } from 'src/users/DTO/users.dto';
-import { MailerConfig } from 'src/configs/mailer.config';
 
 export interface AuthResult {
     access_token: string;
@@ -19,7 +17,6 @@ export class AuthService {
         public readonly userService: UsersService,
         public readonly jwtService: JwtService,
         public readonly passwordService: PasswordService,
-        public readonly mailerService: MailerService
     ) { }
 
     async singUp(userDTO: UserDTO): Promise<User> {
