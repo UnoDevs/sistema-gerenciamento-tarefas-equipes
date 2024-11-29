@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        margin-top: 15px;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 10px;
+        width: 500px;
+        box-shadow: 1px 2px 15px -5px rgba(0,0,0,0.69);
+    }
+
+    input#email.form-control, input#senhaDigitada.form-control {
+        width: 460px;
+    }
+
+    .button-container {
+        width: 100%; /* Ocupa toda a largura disponível */
+        display: flex; /* Usa flexbox */
+        justify-content: space-between; /* Espaça o botão e o link */
+        margin-top: 20px; /* Espaço acima do botão */
+    }
+
+    button.btn.btn-primary {
+        width: auto; /* Ajusta a largura do botão */
+        margin-bottom: 15px;
+    }
+
+    a {
+        align-self: center; /* Centraliza o link verticalmente */
+        text-align: right; /* Alinha o texto à direita */
+    }
+
+    .home-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+</style>
+<body>
+    
+    <a class="btn btn-primary home-button" href="/users/register">Home</a>
+
+    <div class="container mt-5">
+        <form action="/users/login" method="POST">
+            <h1 class="mb-4">Login</h1>
+            <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= message %>
+                </div>
+            <% } %>       
+            <div class="mb-3">
+                <label for="email" class="form-label" >Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu email" required>
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label" >Senha</label>
+                <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua senha" required>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="#">Esqueci a senha</a>
+            </div>
+        </form>            
+    </div>
+    
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
