@@ -1,9 +1,9 @@
 import { Team } from "src/teams/teams.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Tasks } from "src/tasks/tasks.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
-@Unique(["email"])
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -20,8 +20,10 @@ export class User {
     @Column()
     role: string;
 
-    @ManyToMany(() => Team, (team) => team.members)
+    @ManyToMany(() => Team, (teams) => teams.members)
     teams: Team[];
 
+    @ManyToMany(() => Tasks, (tasks) => tasks.users)
+    tasks: Tasks[];
 
 }

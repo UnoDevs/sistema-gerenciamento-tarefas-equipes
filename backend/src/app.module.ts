@@ -1,4 +1,3 @@
-// import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -37,6 +36,9 @@ import { TeamsModule } from './teams/teams.module';
 //   }
 
 // };
+import { TasksController } from './tasks/tasks.controller';
+import { TasksModule } from './tasks/tasks.module';
+import { Tasks } from './tasks/tasks.entity';
 
 @Module({
   imports: [
@@ -47,15 +49,14 @@ import { TeamsModule } from './teams/teams.module';
       username: 'admin',
       password: 'admin',
       database: 'sistema',
-      entities: [User],
+      entities: [User, Tasks],
       synchronize: true,
     }),
-    // MailerModule.forRoot(MailerConfig),
     UsersModule,
     AuthModule,
-    TeamsModule
+    TasksModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, TasksController],
   providers: [AppService, TeamsService],
 })
 export class AppModule {}
