@@ -29,3 +29,26 @@ export class AssignTaskToUserDTO {
     @IsNotEmpty()
     requestUserId: number;
 }
+
+export class UpdateTaskDTO {
+    @IsString()
+    title: string;
+    @IsString()
+    description: string;
+    dueDate: Date;
+    status: string;
+    @IsNumber()
+    createUserId: number;
+}
+
+export class UpdateStatusDTO {
+    @IsNotEmpty()
+    @IsString()
+    status: string;
+    @IsNotEmpty()
+    @IsNumber()
+    taskId: number;
+    @IsNotEmpty()
+    @IsNumber()
+    requestUserId: number;
+}

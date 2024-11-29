@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, UnauthorizedException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { AssignTaskToUserDTO, CreateTaskDTO } from './DTO/tasks.dto';
+import { AssignTaskToUserDTO, CreateTaskDTO, UpdateTaskDTO } from './DTO/tasks.dto';
 import { ROLESCONSTANTS } from 'src/constants/role.constants';
 
 @Controller('tasks')
@@ -33,5 +33,10 @@ export class TasksController {
         } else {
             return this.tasksService.assignTask(taskDTO.user_id,taskDTO.task_id);
         } 
+    }
+
+    @Put(':id')
+    async updateTask(@Param('id') id: number, @Body() taskDTO: UpdateTaskDTO){
+        return this.tasksService.updateTask(taskDTO,id);
     }
 }

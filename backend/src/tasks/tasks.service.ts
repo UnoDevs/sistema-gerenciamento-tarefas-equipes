@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Tasks } from './tasks.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/users.entity';
-import { CreateTaskDTO } from './DTO/tasks.dto';
+import { CreateTaskDTO, UpdateTaskDTO } from './DTO/tasks.dto';
 import { Team } from 'src/teams/teams.entity';
 
 @Injectable()
@@ -90,8 +90,29 @@ export class TasksService {
         return this.tasksRepository.save(task);
     }
 
-    async updateTask(taskDTO: CreateTaskDTO){
+    async updateTask(taskDTO: UpdateTaskDTO, taskId: number){
+        const {title,description,dueDate,status,createUserId} = taskDTO;
+        const taskReq = await this.tasksRepository.findOne({
+            where: {id: taskId},
+            relations: ['users']
+        });
+        if(taskReq == null){
+            throw new BadRequestException('Task not found!');
+        }
+
+        const userReq = await this.usersRepository.findOne({where: {id: createUserId}});
+        const hasUser = taskReq.users.filter(users => users.email === userReq.email);
         
+        if(hasUser.length <= 0 && userReq.role != 'ADMIN'){
+            throw new BadRequestException('User not in Task to Update');
+        }
+
+        taskReq.title = title;
+        taskReq.description = description;
+        taskReq.dueDate = dueDate;
+        taskReq.status = status;
+
+        return this.tasksRepository.save(taskReq);
     }
 
     async validatePermission(id_user,permissionRole){
@@ -102,5 +123,7 @@ export class TasksService {
             return false
         }
     }
+
+    
 
 }
