@@ -19,7 +19,6 @@ export class AuthService {
         public readonly userService: UsersService,
         public readonly jwtService: JwtService,
         public readonly passwordService: PasswordService,
-        public readonly mailerService: MailerService
     ) { }
 
     async singUp(userDTO: UserDTO): Promise<User> {
