@@ -13,6 +13,9 @@ export class CreateTaskDTO {
     @IsNotEmpty()
     @IsNumber()
     createUserId: number;
+    @IsNotEmpty()
+    @IsNumber()
+    teamId: number;
 }
 
 export class AssignTaskToUserDTO {
@@ -22,4 +25,7 @@ export class AssignTaskToUserDTO {
     @IsNotEmpty()
     @IsNumber()
     user_id: number;
+    @IsNumber()
+    @IsNotEmpty()
+    requestUserId: number;
 }

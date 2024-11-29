@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UnauthorizedException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { AssignTaskToUserDTO, CreateTaskDTO } from './DTO/tasks.dto';
+import { ROLESCONSTANTS } from 'src/constants/role.constants';
 
 @Controller('tasks')
 export class TasksController {
@@ -23,7 +24,14 @@ export class TasksController {
     }
 
     @Put('assigntask')
-    assignTask(@Body() taskDTO: AssignTaskToUserDTO){
-        return this.tasksService.assignTask(taskDTO.user_id,taskDTO.task_id);
+    async assignTask(@Body() taskDTO: AssignTaskToUserDTO){
+
+        const authorized = await this.tasksService.validatePermission(taskDTO.requestUserId,'ADMIN');
+
+        if(!authorized){
+            throw new UnauthorizedException('Requesting user does not have permission!');
+        } else {
+            return this.tasksService.assignTask(taskDTO.user_id,taskDTO.task_id);
+        } 
     }
 }

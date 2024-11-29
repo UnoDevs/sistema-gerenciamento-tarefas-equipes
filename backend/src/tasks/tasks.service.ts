@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tasks } from './tasks.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/users.entity';
 import { CreateTaskDTO } from './DTO/tasks.dto';
+import { Team } from 'src/teams/teams.entity';
 
 @Injectable()
 export class TasksService {
@@ -12,7 +13,10 @@ export class TasksService {
         private tasksRepository: Repository<Tasks>,
         
         @InjectRepository(User)
-        private usersRepository: Repository<User>
+        private usersRepository: Repository<User>,
+
+        @InjectRepository(Team)
+        private teamRepository: Repository<Team>
     ){}
 
     async findAll() {
@@ -26,8 +30,48 @@ export class TasksService {
         });
     }
 
+    async findByTeam(id: number){
+        const team = await this.teamRepository.findOneBy({id});
+        return this.tasksRepository.find(
+            {
+                where: {team: team},
+                relations: ['users','team']
+            }
+        )
+    }
+
     async createTask(taskDTO: CreateTaskDTO){
-        const task = this.tasksRepository.create(taskDTO);
+
+        const {title, description, dueDate, status, teamId, createUserId} = taskDTO;
+
+        //VALIDA ROLE DE PERMISSÕES
+        const userRequest = await this.usersRepository.findOneBy({id:createUserId})
+        if(!userRequest || (userRequest.role != 'ADMIN' && userRequest.role != 'LEADER')){
+            throw new BadRequestException('User with no permission or not found!');
+        }
+
+        //COLETA EQUIPES
+        const team = await this.teamRepository.findOne({ 
+            where:{id: teamId},
+            relations:['tasks']
+        })
+        if(!teamId){
+            throw new BadRequestException('Team not found!');
+        } 
+
+        //VALIDA QUANTIDADE DE TAREFAS NO TIME
+        const openTasks = team.tasks.filter(task => { return (task.status === 'Pendente' || task.status === 'Progresso')});
+        if(openTasks.length >= 50){
+            throw new BadRequestException('The team already has 50 open tasks! Finish the tasks!');
+        }
+
+        const task = this.tasksRepository.create({
+            title,
+            description,
+            dueDate,
+            status,
+            team
+        });
         return this.tasksRepository.save(task);
     }
 
@@ -36,7 +80,7 @@ export class TasksService {
         const task = await this.tasksRepository.findOne({
             where: { id: id_tasks },
             relations: ['users','team'],
-          });
+        });
 
         const users = await this.usersRepository.findOneBy({id: id_user});
 
@@ -52,9 +96,11 @@ export class TasksService {
 
     async validatePermission(id_user,permissionRole){
         const users = await this.usersRepository.findOneBy({id: id_user});
-
-        //Validar se o usuário possui o acesso necessário
-
+        if(users?.role == permissionRole){
+            return true;
+        } else {
+            return false
+        }
     }
 
 }
