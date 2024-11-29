@@ -1,4 +1,3 @@
-// import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,34 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/users.entity';
-// import { MailerModule } from '@nestjs-modules/mailer';
-// import * as handlebars from "handlebars";
-// import path from 'path';
-// import { MailerConfig } from './configs/mailer.config';
-
-// const helpers = {
-  
-//   handlebarsIntl: function(value) {
-    
-//     let context = {
-//       value: value
-//     };
-
-//     var intlData = {
-//       locales: ["pt-BR"]
-//     };
-
-//     const template = handlebars.compile("{{ number }} is the final result!");
-
-//     const compiled = template(context, {
-//       data: { intl: intlData }
-//     });
-
-//     return compiled;
-
-//   }
-
-// };
+import { TasksController } from './tasks/tasks.controller';
+import { TasksModule } from './tasks/tasks.module';
+import { Tasks } from './tasks/tasks.entity';
 
 @Module({
   imports: [
@@ -44,14 +18,14 @@ import { User } from './users/users.entity';
       username: 'admin',
       password: 'admin',
       database: 'sistema',
-      entities: [User],
+      entities: [User, Tasks],
       synchronize: true,
     }),
-    // MailerModule.forRoot(MailerConfig),
     UsersModule,
-    AuthModule
+    AuthModule,
+    TasksModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, TasksController],
   providers: [AppService],
 })
 export class AppModule {}

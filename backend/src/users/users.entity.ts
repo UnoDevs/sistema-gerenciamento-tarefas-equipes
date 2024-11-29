@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Tasks } from "src/tasks/tasks.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
-@Unique(["email"])
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,5 +16,7 @@ export class User {
     @Column()
     password: string;
 
+    @ManyToMany(() => Tasks, (tasks) => tasks.users)
+    tasks: Tasks[];
 
 }
