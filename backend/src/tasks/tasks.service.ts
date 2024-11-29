@@ -11,18 +11,18 @@ export class TasksService {
         @InjectRepository(Tasks)
         private tasksRepository: Repository<Tasks>,
         
-        @InjectRepository(Tasks)
+        @InjectRepository(User)
         private usersRepository: Repository<User>
     ){}
 
     async findAll() {
-        return this.tasksRepository.find({relations: ['users']});
+        return this.tasksRepository.find({relations: ['users','team']});
     }
 
     async findById(id: number) {
         return this.tasksRepository.findOne({
             where: {id: id},
-            relations: ['users']
+            relations: ['users','team']
         });
     }
 
@@ -35,13 +35,19 @@ export class TasksService {
     async assignTask(id_user,id_tasks){
         const task = await this.tasksRepository.findOne({
             where: { id: id_tasks },
-            relations: ['users'],
+            relations: ['users','team'],
           });
 
         const users = await this.usersRepository.findOneBy({id: id_user});
 
+        //Validar se usuário está no mesmo time que a tarefa
+
         task.users.push(users);
         return this.tasksRepository.save(task);
+    }
+
+    async updateTask(taskDTO: CreateTaskDTO){
+        
     }
 
     async validatePermission(id_user,permissionRole){

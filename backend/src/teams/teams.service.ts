@@ -16,7 +16,7 @@ export class TeamsService {
         public readonly usersService: UsersService
     ) { }
 
-    async create(idUser: number, data: TeamDTO[]): Promise<Team[]> {
+    async create(idUser: number, data: TeamDTO[]){
 
         const user = this.usersService.findOneById(idUser);
 

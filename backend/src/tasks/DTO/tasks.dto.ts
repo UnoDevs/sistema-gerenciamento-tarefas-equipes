@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Team } from "src/teams/teams.entity";
 
 export class CreateTaskDTO {
     @IsNotEmpty()
