@@ -58,7 +58,7 @@ import { Team } from './teams/teams.entity';
     TasksModule,
     TeamsModule
   ],
-  controllers: [AppController, TasksController],
-  providers: [AppService, TeamsService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

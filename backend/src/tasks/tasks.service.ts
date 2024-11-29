@@ -40,7 +40,7 @@ export class TasksService {
 
         const users = await this.usersRepository.findOneBy({id: id_user});
 
-        //Validar se usuário está no mesmo time que a tarefa
+        
 
         task.users.push(users);
         return this.tasksRepository.save(task);
