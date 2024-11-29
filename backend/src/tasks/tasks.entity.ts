@@ -6,7 +6,7 @@ export class Tasks {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({default: "Nova Tarefa"})
     title: string;
 
     @Column()
@@ -15,7 +15,7 @@ export class Tasks {
     @Column()
     dueDate: Date;
 
-    @Column()
+    @Column({default: "Pendente"})
     status: string;
 
     @ManyToMany(() => User, (user) => user.tasks)
