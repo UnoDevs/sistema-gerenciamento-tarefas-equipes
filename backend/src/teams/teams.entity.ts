@@ -1,5 +1,6 @@
+import { Tasks } from "src/tasks/tasks.entity";
 import { User } from "src/users/users.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
@@ -17,5 +18,8 @@ export class Team {
     @ManyToMany(() => User, (user) => user.tasks)
     @JoinTable()
     members: User[];
+
+    @OneToMany(() => Tasks, (task) => task.team)
+    tasks: Tasks[];
 
 }

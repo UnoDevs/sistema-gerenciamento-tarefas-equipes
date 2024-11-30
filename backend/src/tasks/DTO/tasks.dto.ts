@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Team } from "src/teams/teams.entity";
 
 export class CreateTaskDTO {
     @IsNotEmpty()
@@ -12,6 +13,9 @@ export class CreateTaskDTO {
     @IsNotEmpty()
     @IsNumber()
     createUserId: number;
+    @IsNotEmpty()
+    @IsNumber()
+    teamId: number;
 }
 
 export class AssignTaskToUserDTO {
@@ -21,4 +25,18 @@ export class AssignTaskToUserDTO {
     @IsNotEmpty()
     @IsNumber()
     user_id: number;
+    @IsNumber()
+    @IsNotEmpty()
+    requestUserId: number;
+}
+
+export class UpdateTaskDTO {
+    @IsString()
+    title: string;
+    @IsString()
+    description: string;
+    dueDate: Date;
+    status: string;
+    @IsNumber()
+    createUserId: number;
 }

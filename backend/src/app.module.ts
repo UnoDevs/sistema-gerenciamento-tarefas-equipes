@@ -39,6 +39,9 @@ import { TeamsModule } from './teams/teams.module';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksModule } from './tasks/tasks.module';
 import { Tasks } from './tasks/tasks.entity';
+import { Team } from './teams/teams.entity';
+import { CommentsModule } from './comments/comments.module';
+import { Comment } from './comments/comments.entity';
 
 @Module({
   imports: [
@@ -49,14 +52,16 @@ import { Tasks } from './tasks/tasks.entity';
       username: 'admin',
       password: 'admin',
       database: 'sistema',
-      entities: [User, Tasks],
+      entities: [User, Tasks,Team, Comment],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
-    TasksModule
+    TasksModule,
+    TeamsModule,
+    CommentsModule
   ],
-  controllers: [AppController, TasksController],
-  providers: [AppService, TeamsService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -3,40 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            padding: 0 15px; /* Ajusta o padding, se necessário */
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar .menu li {
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .sidebar .menu li:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .content h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .create-team {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .create-team:hover {
+            background-color: #0056b3;
+        }
+
+        .kanban {
+            margin-top: 30px;
+        }
+
+        .kanban-columns {
+            display: flex;
+            gap: 20px;
+        }
+
+        .kanban-column {
+            flex: 1;
+            background-color: #f4f4f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .kanban-column h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .kanban-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .kanban-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<style>
-    * {
-        margin:  0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    div.container.mt-5 {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-</style>
 <body>
-    <!-- <div class="container mt-5">
-        <h1>Bem-vindo, <%= user.name %>!</h1>
-        <p>Email: <%= user.email %></p>
-        <p>Você fez login com sucesso.</p>
-        <a href="/login" class="btn btn-primary">Voltar</a>
-    </div> -->
-
-    <div class="container mt-5">
-        <h1>Bem-vindo, <%= user.name %>!</h1>
-        <p>Email: <%= user.email %></p>
-        <p>Você fez login com sucesso.</p>
-        <a href="/login" class="btn btn-primary">Voltar</a>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">Dashboard</div>
+            <ul class="menu">
+                <li>Serviços</li>
+                <li>Equipes</li>
+                <li>Membros</li>
+                <li>Configurações</li>
+                <li><a href="/logout" style="color: #fff; text-decoration: none;">Deslogar</a></li>
+            </ul>
+        </aside>
+        <main class="content">
+            <h1>Criação de Equipes</h1>
+            <button class="create-team">+ Criar Nova Equipe</button>
+            <form class="team-form mt-4" action="/teams/create" method="POST">
+                <div class="mb-3">
+                    <label for="team-name" class="form-label">Nome da Equipe:</label>
+                    <input type="text" class="form-control" id="team-name" name="team_name" placeholder="Nome da equipe" required>
+                </div>
+                <div class="mb-3">
+                    <label for="team-description" class="form-label">Descrição da equipe:</label>
+                    <textarea class="form-control" id="team-description" name="team_description" rows="3" placeholder="Descrição da equipe..." required></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Salvar Equipe</button>
+            </form>
+            <div class="kanban">
+                <h2>Kanban</h2>
+                <div class="kanban-columns">
+                    <div class="kanban-column" data-status="to-do">
+                        <h3>A Fazer</h3>
+                        <div class="kanban-items">
+                            
+                        </div>
+                    </div>
+                    <div class="kanban-column" data-status="in-progress">
+                        <h3>Em Andamento</h3>
+                        <div class="kanban-items">
+                           
+                        </div>
+                    </div>
+                    <div class="kanban-column" data-status="done">
+                        <h3>Concluído</h3>
+                        <div class="kanban-items">
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Aqui fica o trecho de boas-vindas -->
+            <div class="container-fluid mt-5">
+                <h1>Bem-vindo,!</h1>
+                <p>Email: </p>
+                <p>Você fez login com sucesso.</p>
+                <a href="/login" class="btn btn-primary">Voltar</a>
+            </div>
+        </main>
     </div>
-
+</body>
     <!-- Bootstrap JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
