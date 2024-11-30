@@ -39,30 +39,55 @@ app.get('/singin', (req: Request, res: Response) => {
     res.render('singin');
 })
 
-app.post('/singin', (req, res) => {
+app.post('/singin', async (req, res) => {
    const { name, email, senha } = req.body;
 
     try {
-    const response = axios.post('http://localhost:3001/users', 
+    const response = await axios.post('http://localhost:3001/users', 
     {
         name: name,
         email: email,
         password: senha,
         role: 'ADMIN'
     })
+
+    if (response.data.success) {
+        res.redirect('/login');
+    } else {
+        res.render('/singin', { error: 'Credenciais inválidas' });
+    }
     }catch (error) {
         res.json(error)
     }
-    res.redirect('/login')
-  });
+});
 
 app.get('/login', (req: Request, res: Response) => {
     res.render('login');
 })
 
-app.post('/login', (req: Request, res: Response) => {
-    
+app.post('/login', async (req: Request, res: Response) => {
+    const {email, senha} = req.body;
+    try {
+        const response = await axios.post('http://localhost:3001/login', 
+        {
+            email: email,
+            password: senha,
+        })
+
+        if (response.data.success) {
+            res.redirect('/dashboard');
+        } else {
+            res.render('login', { error: 'Credenciais inválidas' });
+        }
+
+    }catch (error) {
+        res.redirect('/login')
+    }
+
 })
 
+app.get('/dashboard', (req: Request, res: Response) => {
+    res.render('dashboard',{});
+})
 
 app.listen('3000', () => console.log("Server is listening on port 3000"));
