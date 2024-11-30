@@ -40,15 +40,3 @@ export class UpdateTaskDTO {
     @IsNumber()
     createUserId: number;
 }
-
-export class UpdateStatusDTO {
-    @IsNotEmpty()
-    @IsString()
-    status: string;
-    @IsNotEmpty()
-    @IsNumber()
-    taskId: number;
-    @IsNotEmpty()
-    @IsNumber()
-    requestUserId: number;
-}

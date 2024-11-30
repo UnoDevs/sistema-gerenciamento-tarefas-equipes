@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tasks } from './tasks.entity';
 import { Repository } from 'typeorm';
@@ -60,7 +60,7 @@ export class TasksService {
         } 
 
         //VALIDA QUANTIDADE DE TAREFAS NO TIME
-        const openTasks = team.tasks.filter(task => { return (task.status === 'Pendente' || task.status === 'Progresso')});
+        const openTasks = team.tasks.filter(task => { return (task.status === 'PENDENTE' || task.status === 'EM ANDAMENTO' || task.status === 'CONCLUIDO')});
         if(openTasks.length >= 50){
             throw new BadRequestException('The team already has 50 open tasks! Finish the tasks!');
         }
@@ -102,9 +102,13 @@ export class TasksService {
 
         const userReq = await this.usersRepository.findOne({where: {id: createUserId}});
         const hasUser = taskReq.users.filter(users => users.email === userReq.email);
-        
+
         if(hasUser.length <= 0 && userReq.role != 'ADMIN'){
             throw new BadRequestException('User not in Task to Update');
+        }
+
+        if((status !== 'PENDENTE') && (status !== 'EM ANDAMENTO') && (status !== 'CONCLUIDO')){
+            throw new BadRequestException('Illegal status state');
         }
 
         taskReq.title = title;
@@ -115,6 +119,19 @@ export class TasksService {
         return this.tasksRepository.save(taskReq);
     }
 
+    async getTaskComments(taskId: number) {
+        const task = await this.tasksRepository.findOne({
+          where: { id: taskId },
+          relations: ['comments'],
+        });
+    
+        if (!task) {
+          throw new NotFoundException(`Task with ID ${taskId} not found`);
+        }
+    
+        return task.comments;
+      }
+
     async validatePermission(id_user,permissionRole){
         const users = await this.usersRepository.findOneBy({id: id_user});
         if(users?.role == permissionRole){
@@ -123,7 +140,4 @@ export class TasksService {
             return false
         }
     }
-
-    
-
 }
