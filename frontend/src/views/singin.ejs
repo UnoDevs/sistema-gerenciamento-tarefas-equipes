@@ -69,17 +69,17 @@
                 <%= message %>
             </div>
         <% } %>
-        <form action="/users/save" method="POST">
+        <form action="/singin" method="POST">
             <div class="mb-3 box-container">
-                <input type="hidden" name="id" value="<%= id_usuario %>"> <!-- Para identificar o usuário -->
+                <input type="hidden" name="id" value=""> <!-- Para identificar o usuário -->
                 <label for="name" class="form-label">Nome</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="Digite o nome" value="<%= name %>" required>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Digite o nome" value="" required>
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Digite o email" value="<%= email %>" required>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Digite o email" value="" required>
                 <label for="senha" class="form-label">Senha</label>
-                <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite a senha" <%= id_usuario ? 'required' : '' %>>
+                <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite a senha" required>
                 <label for="confirma_senha" class="form-label">Confirmação de Senha</label>
-                <input type="password" id="confirma_senha" name="confirma_senha" class="form-control" placeholder="Confirme a senha" <%= id_usuario ? 'required' : '' %>
+                <input type="password" id="confirma_senha" name="confirma_senha" class="form-control" placeholder="Confirme a senha" required>
                 <label for="papel"></label>
                 
                 <button type="submit" class="btn btn-primary">Cadastrar</button>

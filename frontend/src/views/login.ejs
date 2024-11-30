@@ -67,13 +67,8 @@
     <a class="btn btn-primary home-button" href="/users/register">Home</a>
 
     <div class="container mt-5">
-         <form action="/users/login" method="POST"> <!--/users/login -->
-            <h1 class="mb-4">Login</h1>
-            <% if (typeof message !== 'undefined') { %>
-                <div class="alert alert-danger" role="alert">
-                    <%= message %>
-                </div>
-            <% } %>       
+         <form action="/login" method="POST">
+            <h1 class="mb-4">Login</h1>     
             <div class="mb-3">
                 <label for="email" class="form-label" >Email</label>
                 <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu email" required>
