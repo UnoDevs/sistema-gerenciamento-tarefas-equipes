@@ -51,13 +51,13 @@ app.post('/singin', async (req, res) => {
         role: 'ADMIN'
     })
 
-    if (response.data.success) {
+    if (response.status >= 200 || response.status <= 299) {
         res.redirect('/login');
     } else {
-        res.render('/singin', { error: 'Credenciais inválidas' });
+        res.render('singin');
     }
     }catch (error) {
-        res.json(error)
+        res.render('singin')
     }
 });
 
@@ -73,8 +73,8 @@ app.post('/login', async (req: Request, res: Response) => {
             email: email,
             password: senha,
         })
-
-        if (response.data.success) {
+        console.log(response)
+        if (response.status === 201) {
             res.redirect('/dashboard');
         } else {
             res.render('login', { error: 'Credenciais inválidas' });
