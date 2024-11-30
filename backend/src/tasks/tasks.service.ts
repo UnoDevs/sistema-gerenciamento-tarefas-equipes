@@ -36,7 +36,7 @@ export class TasksService {
         const task = await this.tasksRepository.findOne({
             where: { id: id_tasks },
             relations: ['users'],
-          });
+        });
 
         const users = await this.usersRepository.findOneBy({id: id_user});
 

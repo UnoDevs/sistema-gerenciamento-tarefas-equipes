@@ -41,6 +41,8 @@ export class UsersService {
         currentUser.email = data.email;
         currentUser.password = data.password;
         currentUser.role = data.role;
+        currentUser.tasks = data.tasks;
+        currentUser.teams = data.teams;
 
         await this.usersRepository.save(currentUser);
         return currentUser;

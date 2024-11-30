@@ -1,4 +1,6 @@
 import { IsEmail, IsNotEmpty } from "class-validator";
+import { Tasks } from "src/tasks/tasks.entity";
+import { Team } from "src/teams/teams.entity";
 
 export class SingUpDTO {
     @IsNotEmpty()
@@ -27,6 +29,8 @@ export class SignInDTO {
 
 export class ProfileDTO {
     
+    id?: number;
+
     @IsNotEmpty()
     name: string;
 
@@ -35,6 +39,10 @@ export class ProfileDTO {
     
     @IsNotEmpty()
     role: string;
+
+    teams?: Team[];
+    
+    tasks?: Tasks[];
     
     password?: string;
 }
