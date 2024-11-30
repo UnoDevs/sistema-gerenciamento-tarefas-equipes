@@ -1,15 +1,25 @@
 import express, { Request, Response } from "express";
 import mysql from "mysql2/promise";
-import bcrypt from "bcrypt";
+import path from 'path';
+import ejs from 'ejs';
+import session from 'express-session';
 
 const app = express();
 
 // Servir arquivos estáticos da pasta public
-//app.use(express.static('public'));
+app.use(express.static('frontend'));
 
 // Configura EJS como a engine de renderização de templates
 app.set('view engine', 'ejs');
-app.set('views', `${__dirname}/views`);
+//app.set('views', path.join(`${__dirname}, src, views`));
+app.set('views', path.join(__dirname, '/views'));
+
+
+declare module 'express-session' {
+    interface SessionData {
+      user?: { id: number; name: string; email: string; papel?: string };
+    }
+}
 
 const connection = mysql.createPool({
     host: "localhost",
@@ -24,6 +34,9 @@ app.use(express.json());
 // Middleware para permitir dados no formato URLENCODED
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 app.get('/', async function (req: Request, res: Response) {
     return res.render("posts");
 });
@@ -33,6 +46,14 @@ function formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR'); // Formatar no padrão brasileiro (dd/mm/yyyy)
 }
+
+// Middleware de sessão (deve ser antes das rotas que acessam a sessão)
+app.use(session({
+    secret: 'segredo', // Substitua por uma chave secreta
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Em produção, use 'true' com HTTPS
+}));
 
 app.get('/users', async function (req: Request, res: Response) {
     const [rows]: any = await connection.query("SELECT * FROM users");
@@ -90,6 +111,30 @@ app.get('/login', (req: Request, res: Response) => {
     res.render('login');
 });
 
+app.get('/dashboard', async function (req: Request, res: Response) {
+
+    // const user = {
+    //     name: 'Usuário Teste',
+    //     email: 'teste@exemplo.com'
+    // };
+
+    console.log(req.session); // Adicione um log para verificar o conteúdo da sessão
+    const usuario = req.session.user; // Pegue o usuário logado da sessão (se estiver usando sessão)
+
+    if (!usuario) {
+        return res.redirect('/login'); // Se não estiver logado, redireciona para login
+    }
+
+    const tasks = {
+        toDo: [{ name: 'Tarefa 1' }, { name: 'Tarefa 2' }],
+        inProgress: [{ name: 'Tarefa 3' }],
+        done: [{ name: 'Tarefa 4' }]
+    };
+
+    res.render('dashboard', { user: usuario, tasks: tasks  });
+
+});
+
 // Rota para login
 app.post('/users/login', async function (req: Request, res: Response) {
     const { email, senha } = req.body;
@@ -106,7 +151,8 @@ app.post('/users/login', async function (req: Request, res: Response) {
         // Comparando a senha
         if (senha === usuario.senha) {
             // Senha está correta
-            res.render('dashboard', { user: usuario });
+            req.session.user = usuario;
+            res.redirect('/dashboard');
         } else {
             // Senha está incorreta
             res.status(401).render('Login', { message: 'Senha incorreta' });
@@ -133,5 +179,53 @@ app.post('/users/delete/:id_usuario', async function (req: Request, res: Respons
     res.redirect("/users"); // Redireciona para a lista de usuários
     
 });
+
+// Rota -> Perfil de usuário
+app.get('/profile', async (req: Request, res: Response) => {
+    const usuario = req.session.user;
+
+    if (!usuario) {
+        return res.redirect('/login'); // Redirecionar para login se não estiver logado
+    }
+
+    // Dados de exemplo
+    const user = {
+        name: usuario.name,
+        email: usuario.email,
+        papel: usuario.papel || 'Usuário',
+        times: [
+            { nome: 'Time A' },
+            { nome: 'Time B' },
+            { nome: 'Time C' }
+        ],
+        tarefas: []
+    };
+
+    const tasks = {
+        toDo: [{ name: 'Planejar a semana' }],
+        inProgress: [{ name: 'Implementar funcionalidade X' }],
+        done: [{ name: 'Concluir relatório' }]
+    };
+
+    res.render('profile', { user, tasks });
+});
+
+app.get('/test-profile', (req: Request, res: Response) => {
+    const user = {
+        name: 'Teste',
+        email: 'teste@exemplo.com',
+        papel: 'Administrador',
+        times: [{ nome: 'Time A' }, { nome: 'Time B' }]
+    };
+
+    const tasks = {
+        toDo: [{ name: 'Tarefa 1' }],
+        inProgress: [{ name: 'Tarefa 2' }],
+        done: [{ name: 'Tarefa 3' }]
+    };
+
+    res.render('profile', { user, tasks });
+});
+
 
 app.listen('3000', () => console.log("Server is listening on port 3000"));

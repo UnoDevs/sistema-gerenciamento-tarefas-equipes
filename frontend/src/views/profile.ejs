@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css"> <!-- Ajuste para seu arquivo de estilo -->
+    <title>Perfil de Usuário</title>
+</head>
+<style>
+    
+.container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.profile, .teams, .tasks {
+    margin-bottom: 20px;
+}
+
+.task-board {
+    display: flex;
+    gap: 10px;
+}
+
+.task-column {
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<body>
+    <div class="container">
+        <h1>Perfil de Usuário</h1>
+        <div class="profile">
+            <h2>Informações do Usuário</h2>
+            <p><strong>Nome:</strong> <%= user.name %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Papel:</strong> <%= user.papel %></p>
+        </div>
+
+        <div class="teams">
+            <h2>Times</h2>
+            <ul>
+                <% user.times.forEach((time) => { %>
+                    <li><%= time.nome %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div class="tasks">
+            <h2>Tarefas</h2>
+            <div class="task-board">
+                <!-- Tarefas em andamento -->
+                <div class="task-column">
+                    <h3>To Do</h3>
+                    <% tasks.toDo.forEach((task) => { %>
+                        <div class="task-card">
+                            <p><%= task.name %></p>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <!-- Tarefas em progresso -->
+                <div class="task-column">
+                    <h3>In Progress</h3>
+                    <% tasks.inProgress.forEach((task) => { %>
+                        <div class="task-card">
+                            <p><%= task.name %></p>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <!-- Tarefas concluídas -->
+                <div class="task-column">
+                    <h3>Done</h3>
+                    <% tasks.done.forEach((task) => { %>
+                        <div class="task-card">
+                            <p><%= task.name %></p>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

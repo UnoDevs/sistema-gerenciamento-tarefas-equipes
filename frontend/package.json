@@ -10,9 +10,11 @@
   "author": "anderson-dev",
   "license": "ISC",
   "dependencies": {
+    "@types/express-session": "^1.18.1",
     "bcrypt": "^5.1.1",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "mysql2": "^3.11.4"
   },
   "devDependencies": {
